@@ -1,0 +1,187 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>BCOVSidecarSubtitles Reference</title>
+		<link rel="stylesheet" type="text/css" href="css/styles.css" media="all" />
+		<link rel="stylesheet" type="text/css" media="print" href="css/stylesPrint.css" />
+		<meta name="generator" content="appledoc 2.2 (build 963)" />
+	</head>
+	<body>
+		<header id="top_header">
+			<div id="library" class="hideInXcode">
+				<h1><a id="libraryTitle" href="index.html">BCOVSidecarSubtitles </a></h1>
+				<a id="developerHome" href="index.html">Brightcove</a>
+			</div>
+			
+			<div id="title" role="banner">
+				<h1 class="hideInXcode">BCOVSidecarSubtitles Reference</h1>
+			</div>
+			<ul id="headerButtons" role="toolbar"></ul>
+		</header>
+		<article>
+			<div id="overview_contents" role="main">
+				<div class="main-navigation navigation-top">
+					<a href="hierarchy.html">Next</a>
+				</div>
+				<div id="header">
+					<div class="section-header">
+						<h1 class="title title-header">BCOVSidecarSubtitles Reference</h1>
+					</div>		
+				</div>
+				<div id="container">
+					
+					<div class="section section-overview index-overview">
+						
+						
+						<h1>Sidecar Subtitles Plugin for Brightcove Player SDK for iOS, version 1.0.0.29</h1>
+
+<h1>Supported Platforms</h1>
+
+<p>Supports iOS 7.0 and above.</p>
+
+<h1>Installation</h1>
+
+<p>You can use <a href="http://cocoapods.org">Cocoapods</a> to add the Sidecar Subtitles Plugin for Brightcove Player SDK to your project. You can find the latest <code>Brightcove-Player-SDK-SidecarSubtitles</code> podspec <a href="https://github.com/CocoaPods/Specs/tree/master/Specs/Brightcove-Player-SDK-SidecarSubtitles">here</a>.</p>
+
+<p>To add the Sidecar Subtitles Plugin for Brightcove Player SDK to your project manually:</p>
+
+<ol>
+<li>Install the latest version of the [Brightcove Player SDK][bcovsdk].</li>
+<li>Download the latest zip'ed release of the plugin from our <a href="https://github.com/brightcove/brightcove-player-sdk-ios-sidecarsubtitles/releases">release page</a>.</li>
+<li>Add the contents of Library and Headers to the project.</li>
+<li>On the &ldquo;Build Phases&rdquo; tab of your application target, add the following to the &ldquo;Link
+ Binary With Libraries&rdquo; phase:
+
+<ul>
+<li><code>libBCOVSidecarSubtitles.a</code></li>
+</ul>
+</li>
+<li>On the &ldquo;Build Settings&rdquo; tab of your application target:
+
+<ul>
+<li>Ensure that BCOVSidecarSubtitles headers are in your application&rsquo;s &ldquo;Header Search Path&rdquo;.</li>
+<li>Ensure that <code>-ObjC</code> has been added to the &ldquo;Other Linker Flags&rdquo; build setting.</li>
+</ul>
+</li>
+</ol>
+
+
+<h1>Quick Start</h1>
+
+<pre><code>    NSString *policyKey;  // (Brightcove Playback API policy Key)
+    NSString *videoID; // (ID of the video you wish to use)
+    NSString *accountId;  // account id
+
+    BCOVPlayerSDKManager *manager = [BCOVPlayerSDKManager sharedManager];
+[1] id&lt;BCOVPlaybackController&gt; controller = [playbackManager createSidecarSubtitlesPlaybackControllerWithViewStrategy:[manager defaultControlsViewStrategy]];
+    [self.view addSubview:controller.view];
+
+    BCOVPlaybackService *playbackService = [[BCOVPlaybackService alloc] initWithAccountId:accoundId policyKey:policyKey];
+[2] [playbackService findVideoWithVideoID:videoID
+                             parameters:nil
+                             completion:^(BCOVVideo *video,
+                                          NSDictionary *jsonResponse,
+                                          NSError      *error) {
+
+                                 [controller setVideos:@[ video ]];
+                                 [controller play];
+
+                             }];
+</code></pre>
+
+<p>Let&rsquo;s break this code down into steps, to make it a bit simpler to digest:</p>
+
+<ol>
+<li><p>BCOVSidecarSubtitles adds some category methods to BCOVPlaybackManager. The first of these is <code>-createSidecarSubtitlesPlaybackControllerWithViewStrategy:</code>. Use this method to create your playback controller. Alternatively (if you are using more than one session provider), you can create a <a href="Classes/BCOVSSSessionProvider.html">BCOVSSSessionProvider</a> and pass that to the manager method that creates a playback controller with upstream session providers.*</p></li>
+<li><p>In order to retrieve web vtt files from your Brightcove account automatically, you need to use the <code>BCOVPlaybackService</code> instead of the BCOVCatalogService to retrieve your videos. If you need to use <code>BCOVCatalogService</code>, you will need to follow the directions in the &ldquo;Manually populating subtitle data&rdquo;.</p></li>
+</ol>
+
+
+<p>* Note that <code>BCOVSSSessionProvider</code> should come before any session providers in the chain passed to the manager when constructing the playback controller. This plugin is <strong>not compatible</strong> with Widevine plugin.</p>
+
+<p>If you have questions or need help, we have a support forum for Brightcove&rsquo;s native Player SDKs at <a href="https://groups.google.com/forum/#!forum/brightcove-native-player-sdks">https://groups.google.com/forum/</a>.</p>
+
+<h1>Manually populating subtitle data</h1>
+
+<p>The BCOVSidecarSubtitle plugin will look for the presence of an array of subtitle metadata in the <code>BCOVVideo</code> object properties, keyed by kBCOVSSVideoPropertiesKeyTextTracks. If you are using <code>BCOVPlaybackService</code> to retrieve videos and those videos have text tracks associated with them, this will be populated automatically.</p>
+
+<p>If you are a providing your own videos, are a Perform customer or trying to use <code>BCOVCatalogService</code>, you will need to structure the data as shown below:</p>
+
+<pre><code> NSArray *subtitles = @[
+    @{
+       kBCOVSSTextTracksKeySource: ..., // required
+       kBCOVSSTextTracksKeySourceLanguage: ..., // required
+       kBCOVSSTextTracksKeyLabel: ..., // required
+       kBCOVSSTextTracksKeyDuration: ..., // required/optional
+       kBCOVSSTextTracksKeyKind: kBCOVSSTextTracksKindSubtitles or kBCOVSSTextTracksKindCaptions, // required
+       kBCOVSSTextTracksKeyDefault: ..., // optional
+       kBCOVSSTextTracksKeyMIMEType: ..., // optional
+   }
+   @{...}, // second text track dictionary
+   @{...}, // third text track dictionary
+];
+
+   BCOVVideo *video = [BCOVVideo alloc] initWithSource:&lt;source&gt; cuePoints:&lt;cuepoints&gt; properties:@{ kBCOVSSVideoPropertiesKeyTextTracks:subtitles }];
+</code></pre>
+
+<h1>Known Issues</h1>
+
+<ul>
+<li><p>This plugin currently does not support integrating with the Widevine Plugin for Brightcove Brightcove Player SDK for iOS.</p></li>
+<li><p>If your videos are being retrieved from the Brightcove Playback API, your renditions must include a master M3U8 playlist. The Sidecar Subtitle plugin does not work with single rendition M3U8 playlists.</p></li>
+<li><p>If you are providing a Subtitle playlist to the plugin, and that subtitle playlist includes links to web vtt files that respond as 404, playback will fail. This is a bug in Apple&rsquo;s AVPlayer.</p></li>
+</ul>
+
+						
+						
+					</div>
+					
+                        
+                    
+					
+					
+					<div class="index-column">
+						<h2 class="index-title">Class References</h2>
+						<ul>
+							
+							<li><a href="Classes/BCOVSSSessionProvider.html">BCOVSSSessionProvider</a></li>
+							
+							<li><a href="Classes/BCOVSSSessionProviderOption.html">BCOVSSSessionProviderOption</a></li>
+							
+						</ul>
+					</div>
+					
+					
+						
+					<div class="index-column">
+						
+                        
+						
+						<h2 class="index-title">Category References</h2>
+						<ul>
+							
+							<li><a href="Categories/BCOVPlayerSDKManager+BCOVSSAdditions.html">BCOVPlayerSDKManager(BCOVSSAdditions)</a></li>
+							
+						</ul>
+						
+					</div>
+					
+				</div>
+				<div class="main-navigation navigation-bottom">
+					<a href="hierarchy.html">Next</a>
+				</div>
+				<div id="footer">
+					<hr />
+					<div class="footer-copyright">
+						<p><span class="copyright">&copy; 2015 Brightcove. All rights reserved. (Last updated: 2015-03-11)</span><br />
+						
+						<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2 (build 963)</a>.</span></p>
+						
+	
+					</div>
+				</div>
+			</div>
+		</article>		
+	</body>
+</html>
