@@ -1,4 +1,4 @@
-# Sidecar Subtitles Plugin for Brightcove Player SDK for iOS, version 1.0.0.29
+# Sidecar Subtitles Plugin for Brightcove Player SDK for iOS, version 1.0.1.41
 
 Supported Platforms
 ===================
@@ -25,7 +25,6 @@ To add the Sidecar Subtitles Plugin for Brightcove Player SDK to your project ma
 [podspecs]: https://github.com/CocoaPods/Specs/tree/master/Specs/Brightcove-Player-SDK-SidecarSubtitles
 [release]: https://github.com/brightcove/brightcove-player-sdk-ios-sidecarsubtitles/releases
 [bcovsdk]: https://github.com/brightcove/brightcove-player-sdk-ios
-
 Quick Start
 ===========
 
