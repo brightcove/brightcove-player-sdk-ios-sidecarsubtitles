@@ -6,9 +6,9 @@
 // License: https://accounts.brightcove.com/en/terms-and-conditions
 //
 
-#import "BCOVPlayerSDK.h"
+#import <Foundation/Foundation.h>
 
-@import Foundation;
+#import <BrightcovePlayerSDK/BrightcovePlayerSDK.h>
 
 @class BCOVSSSessionProviderOption;
 
@@ -135,13 +135,20 @@ extern NSString * const kBCOVSSTextTracksKindCaptions;
 - (id<BCOVPlaybackController>)createSidecarSubtitlesPlaybackControllerWithViewStrategy:(BCOVPlaybackControllerViewStrategy)viewStrategy;
 
 /**
- * Creates and returns a new sidecar subtitle session provider with the 
+ * Creates and returns a new sidecar subtitle session provider with the
  * specified parameters.
  *
- * @param options Optional configuration for the BCOVSSSessionProvider.
+ * @param provider Optional upstream session provider.
  * @return A new session provider with the specified parameters.
  */
-- (id<BCOVPlaybackSessionProvider>)createSidecarSubtitlesSessionProviderWithOptions:(BCOVSSSessionProviderOption *)options;
+- (id<BCOVPlaybackSessionProvider>)createSidecarSubtitlesSessionProviderWithUpstreamSessionProvider:(id<BCOVPlaybackSessionProvider>)provider;
+
+@end
+
+
+@interface BCOVPlayerSDKManager (BCOVSSAdditionsDepricated)
+
+- (id<BCOVPlaybackSessionProvider>)createSidecarSubtitlesSessionProviderWithOptions:(BCOVSSSessionProviderOption *)options __attribute__((deprecated("Use -[BCOVPlayerSDKManager createSidecarSubtitlesSessionWithUpstreamSessionProvider:] with a nil upstream session provider instead.")));
 
 @end
 

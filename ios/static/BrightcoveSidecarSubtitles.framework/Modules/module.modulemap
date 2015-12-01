@@ -1,0 +1,6 @@
+framework module BrightcoveSidecarSubtitles {
+  umbrella header "BrightcoveSidecarSubtitles.h"
+
+  export *
+  module * { export * }
+}
