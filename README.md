@@ -1,4 +1,4 @@
-# Sidecar Subtitles Plugin for Brightcove Player SDK for iOS, version 2.0.0.48
+# Sidecar Subtitles Plugin for Brightcove Player SDK for iOS, version 2.0.1.56
 
 Supported Platforms
 ===================
@@ -7,19 +7,39 @@ Supports iOS 7.0 and above.
 
 Installation
 ============
+The Sidecar Subtitles plugin for the Brightcove Player SDK provides two installation packages for iOS, a static library framework and a dynamic framework. The static library target supports deployment on iOS 7 while the dynamic framework only supports iOS 8 and above.
+
+CocoaPods
+--------------
+
 You can use [Cocoapods][cocoapods] to add the Sidecar Subtitles Plugin for Brightcove Player SDK to your project. You can find the latest `Brightcove-Player-SDK-SidecarSubtitles` podspec [here][podspecs].
+
+Specifying the default pod `Brightcove-Player-SDK-SidecarSubtitles` will install the static library framework. To install the dynamic framework, declare the pod with the `dynamic` subspec: `Brightcove-Player-SDK-SidecarSubtitles/dynamic`
+
+Static Framework example:
+
+    pod 'Brightcove-Player-SDK-SidecarSubtitles'
+    
+Dynamic Framework example:
+
+    pod 'Brightcove-Player-SDK-SidecarSubtitles/dynamic'    
+    
+Manual
+--------------
 
 To add the Sidecar Subtitles Plugin for Brightcove Player SDK to your project manually:
 
 1. Install the latest version of the [Brightcove Player SDK][bcovsdk].
-1. Download the latest zip'ed release of the plugin from our [release page][release].
-1. Add the contents of Library and Headers to the project.
-1. On the "Build Phases" tab of your application target, add the following to the "Link
-    Binary With Libraries" phase:
-    * `libBCOVSidecarSubtitles.a`
-1. On the "Build Settings" tab of your application target:
-    * Ensure that BCOVSidecarSubtitles headers are in your application's "Header Search Path".
-    * Ensure that `-ObjC` has been added to the "Other Linker Flags" build setting.
+2. Download the latest zip'ed release of the plugin from our [release page][release].
+3. Add the 'BrightcoveSidecarSubtitles.framework' to your project.
+4. On the "Build Settings" tab of your application target, ensure that the "Framework Search Paths" include the path to the framework. This should have been done automatically unless the framework is stored under a different root directory than your project.
+5. (Dynamic Framework only) On the "General" tab of your application target, add 'BrightcoveSidecarSubtitles.framework' to the "Embedded Binary" section.
+6. (Dynamic Framework only) On the "Build Phases" tab, add a "Run Script" phase with the command `bash ${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/BrightcoveSidecarSubtitles.framework/strip-frameworks.sh`. Check "Run script only when installing". This will remove unneeded architectures from the build, which is important for App Store submission. ([rdar://19209161][19209161])
+7. (Static Framework only) On the "Build Settings" tab of your application target, add `-ObjC` to the "Other Linker Flags" build setting.
+
+Imports
+--------------
+The Brightcove Player SDK for iOS can be imported into code a few different ways; `@import BrightcovePlayerSidecarSubtitles;`, `#import <BrightcoveSidecarSubtitles/BrightcovePlayerSDK.h>` or `#import <BrightcoveSidecarSubtitles/[specific class].h>`.
 
 [cocoapods]: http://cocoapods.org
 [podspecs]: https://github.com/CocoaPods/Specs/tree/master/Specs/Brightcove-Player-SDK-SidecarSubtitles

@@ -1,9 +1,9 @@
 //
-//  BrightcoveSidecarSubtitles-iOS.h
-//  BrightcoveSidecarSubtitles-iOS
+// BrightcoveSidecarSubtitles.h
+// BrightcoveSidecarSubtitles
 //
-//  Created by Michael Moscardini on 11/19/15.
-//  Copyright © 2015 Brightcove. All rights reserved.
+// Copyright (c) 2015 Brightcove, Inc. All rights reserved.
+// License: https://accounts.brightcove.com/en/terms-and-conditions
 //
 
 #import <UIKit/UIKit.h>

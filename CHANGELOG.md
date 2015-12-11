@@ -1,3 +1,8 @@
+# 2.0.1
+### Additions and Improvements
+* Reformatted the framework's short version string to comply with App Store submission requirements.
+
+
 # 2.0.0
 ### Breaking Changes
 * The static library distributable has been removed. If installed manually (not CocoaPods), you will need to remove `libBCOVSidecarSubtitles.a` and its headers from the Header Search Path. Please see README.md for new install options (including a static library framework).
