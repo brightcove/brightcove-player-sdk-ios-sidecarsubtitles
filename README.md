@@ -1,13 +1,15 @@
-# Sidecar Subtitles Plugin for Brightcove Player SDK for iOS, version 2.0.1.56
+# Sidecar Subtitles Plugin for Brightcove Player SDK for iOS and tvOS, version 2.0.2.66
 
 Supported Platforms
 ===================
 
-Supports iOS 7.0 and above.
+iOS 7.0 and above.
+
+tvOS 9.0 and above.
 
 Installation
 ============
-The Sidecar Subtitles plugin for the Brightcove Player SDK provides two installation packages for iOS, a static library framework and a dynamic framework. The static library target supports deployment on iOS 7 while the dynamic framework only supports iOS 8 and above.
+The Sidecar Subtitles plugin for the Brightcove Player SDK provides two installation packages for iOS, a static library framework and a dynamic framework. The static library target supports deployment on iOS 7 while the dynamic framework only supports iOS 8 and above. For tvOS, The Sidecar Subtitles plugin providesa dynamic framework only.
 
 CocoaPods
 --------------
@@ -30,8 +32,8 @@ Manual
 To add the Sidecar Subtitles Plugin for Brightcove Player SDK to your project manually:
 
 1. Install the latest version of the [Brightcove Player SDK][bcovsdk].
-2. Download the latest zip'ed release of the plugin from our [release page][release].
-3. Add the 'BrightcoveSidecarSubtitles.framework' to your project.
+2. Download the latest zip'ed release of the BrightcoveSidecarSubtitles plugin from our [release page][release].
+3. Add `BrightcoveSidecarSubtitles.framework` to your project.
 4. On the "Build Settings" tab of your application target, ensure that the "Framework Search Paths" include the path to the framework. This should have been done automatically unless the framework is stored under a different root directory than your project.
 5. (Dynamic Framework only) On the "General" tab of your application target, add 'BrightcoveSidecarSubtitles.framework' to the "Embedded Binary" section.
 6. (Dynamic Framework only) On the "Build Phases" tab, add a "Run Script" phase with the command `bash ${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/BrightcoveSidecarSubtitles.framework/strip-frameworks.sh`. Check "Run script only when installing". This will remove unneeded architectures from the build, which is important for App Store submission. ([rdar://19209161][19209161])
@@ -39,7 +41,10 @@ To add the Sidecar Subtitles Plugin for Brightcove Player SDK to your project ma
 
 Imports
 --------------
-The Brightcove Player SDK for iOS can be imported into code a few different ways; `@import BrightcovePlayerSidecarSubtitles;`, `#import <BrightcoveSidecarSubtitles/BrightcovePlayerSDK.h>` or `#import <BrightcoveSidecarSubtitles/[specific class].h>`.
+The Brightcove Player SDK for iOS can be imported into code a few different ways:
+* `@import BrightcoveSidecarSubtitles;`
+* `#import <BrightcoveSidecarSubtitles/BrightcoveSidecarSubtitles.h>`
+* `#import <BrightcoveSidecarSubtitles/[specific class].h>`.
 
 [cocoapods]: http://cocoapods.org
 [podspecs]: https://github.com/CocoaPods/Specs/tree/master/Specs/Brightcove-Player-SDK-SidecarSubtitles
@@ -72,11 +77,11 @@ Quick Start
 
 Let's break this code down into steps, to make it a bit simpler to digest:
 
-1. BCOVSidecarSubtitles adds some category methods to BCOVPlaybackManager. The first of these is `-createSidecarSubtitlesPlaybackControllerWithViewStrategy:`. Use this method to create your playback controller. Alternatively (if you are using more than one session provider), you can create a BCOVSSSessionProvider and pass that to the manager method that creates a playback controller with upstream session providers.\*
+1. BCOVSidecarSubtitles adds some category methods to BCOVPlaybackManager. The first of these is `-createSidecarSubtitlesPlaybackControllerWithViewStrategy:`. Use this method to create your playback controller. Alternatively (if you are using more than one session provider), you can create a BCOVSSSessionProvider and pass that to the manager method that creates a playback controller with upstream session providers.\* If you are developing for tvOS, the ViewStrategy passed to createSidecarSubtitlesPlaybackControllerWithViewStrategy will be nil.
 
 1. In order to retrieve web vtt files from your Brightcove account automatically, you need to use the `BCOVPlaybackService` instead of the BCOVCatalogService to retrieve your videos. If you need to use `BCOVCatalogService`, you will need to follow the directions in the "Manually populating subtitle data".
 
-\* Note that `BCOVSSSessionProvider` should come before any session providers in the chain passed to the manager when constructing the playback controller. This plugin is **not compatible** with Widevine plugin.
+\* Note that `BCOVSSSessionProvider` should come before any session providers in the chain passed to the manager when constructing the playback controller. This plugin is **not compatible** with the Widevine plugin.
 
 If you have questions or need help, we have a support forum for Brightcove's native Player SDKs at https://groups.google.com/forum/#!forum/brightcove-native-player-sdks .
 
@@ -110,4 +115,3 @@ Known Issues
 * If your videos are being retrieved from the Brightcove Playback API, your renditions must include a master M3U8 playlist. The Sidecar Subtitle plugin does not work with single rendition M3U8 playlists.
 
 * If you are providing a Subtitle playlist to the plugin, and that subtitle playlist includes links to web vtt files that respond as 404, playback will fail. This is a bug in Apple's AVPlayer.
-

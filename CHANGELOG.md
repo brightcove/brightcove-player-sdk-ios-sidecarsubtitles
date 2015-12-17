@@ -1,3 +1,7 @@
+# 2.0.2
+### Additions and Improvements
+* Added dynamic framework support for tvOS.
+
 # 2.0.1
 ### Additions and Improvements
 * Reformatted the framework's short version string to comply with App Store submission requirements.
