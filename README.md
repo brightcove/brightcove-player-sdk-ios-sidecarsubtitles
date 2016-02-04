@@ -1,4 +1,4 @@
-# Sidecar Subtitles Plugin for Brightcove Player SDK for iOS and tvOS, version 2.0.2.66
+# Sidecar Subtitles Plugin for Brightcove Player SDK for iOS and tvOS, version 2.0.3.75
 
 Supported Platforms
 ===================
@@ -9,12 +9,12 @@ tvOS 9.0 and above.
 
 Installation
 ============
-The Sidecar Subtitles plugin for the Brightcove Player SDK provides two installation packages for iOS, a static library framework and a dynamic framework. The static library target supports deployment on iOS 7 while the dynamic framework only supports iOS 8 and above. For tvOS, The Sidecar Subtitles plugin providesa dynamic framework only.
+The Sidecar Subtitles plugin for the Brightcove Player SDK provides two installation packages for iOS, a static library framework and a dynamic framework. The static library target supports deployment on iOS 7 while the dynamic framework only supports iOS 8 and above. For tvOS, The Sidecar Subtitles plugin provides a dynamic framework only.
 
 CocoaPods
 --------------
 
-You can use [Cocoapods][cocoapods] to add the Sidecar Subtitles Plugin for Brightcove Player SDK to your project. You can find the latest `Brightcove-Player-SDK-SidecarSubtitles` podspec [here][podspecs].
+You can use [CocoaPods][cocoapods] to add the Sidecar Subtitles Plugin for Brightcove Player SDK to your project. You can find the latest `Brightcove-Player-SDK-SidecarSubtitles` podspec [here][podspecs].
 
 Specifying the default pod `Brightcove-Player-SDK-SidecarSubtitles` will install the static library framework. To install the dynamic framework, declare the pod with the `dynamic` subspec: `Brightcove-Player-SDK-SidecarSubtitles/dynamic`
 
@@ -32,16 +32,17 @@ Manual
 To add the Sidecar Subtitles Plugin for Brightcove Player SDK to your project manually:
 
 1. Install the latest version of the [Brightcove Player SDK][bcovsdk].
-2. Download the latest zip'ed release of the BrightcoveSidecarSubtitles plugin from our [release page][release].
+2. Download the latest zipped release of the BrightcoveSidecarSubtitles plugin from our [release page][release].
 3. Add `BrightcoveSidecarSubtitles.framework` to your project.
 4. On the "Build Settings" tab of your application target, ensure that the "Framework Search Paths" include the path to the framework. This should have been done automatically unless the framework is stored under a different root directory than your project.
-5. (Dynamic Framework only) On the "General" tab of your application target, add 'BrightcoveSidecarSubtitles.framework' to the "Embedded Binary" section.
+5. (Dynamic Framework only) On the "General" tab of your application target, add 'BrightcoveSidecarSubtitles.framework' to the "Embedded Binaries" section.
 6. (Dynamic Framework only) On the "Build Phases" tab, add a "Run Script" phase with the command `bash ${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/BrightcoveSidecarSubtitles.framework/strip-frameworks.sh`. Check "Run script only when installing". This will remove unneeded architectures from the build, which is important for App Store submission. ([rdar://19209161][19209161])
 7. (Static Framework only) On the "Build Settings" tab of your application target, add `-ObjC` to the "Other Linker Flags" build setting.
 
 Imports
 --------------
 The Brightcove Player SDK for iOS can be imported into code a few different ways:
+
 * `@import BrightcoveSidecarSubtitles;`
 * `#import <BrightcoveSidecarSubtitles/BrightcoveSidecarSubtitles.h>`
 * `#import <BrightcoveSidecarSubtitles/[specific class].h>`.
@@ -96,7 +97,7 @@ If you are a providing your own videos, are a Perform customer or trying to use 
            kBCOVSSTextTracksKeySource: ..., // required
            kBCOVSSTextTracksKeySourceLanguage: ..., // required
            kBCOVSSTextTracksKeyLabel: ..., // required
-           kBCOVSSTextTracksKeyDuration: ..., // required/optional
+           kBCOVSSTextTracksKeyDuration: ..., // required/optional [1]
            kBCOVSSTextTracksKeyKind: kBCOVSSTextTracksKindSubtitles or kBCOVSSTextTracksKindCaptions, // required
            kBCOVSSTextTracksKeyDefault: ..., // optional
            kBCOVSSTextTracksKeyMIMEType: ..., // optional
@@ -106,6 +107,12 @@ If you are a providing your own videos, are a Perform customer or trying to use 
     ];
        
        BCOVVideo *video = [BCOVVideo alloc] initWithSource:<source> cuePoints:<cuepoints> properties:@{ kBCOVSSVideoPropertiesKeyTextTracks:subtitles }];
+
+Notes
+============
+1. kBCOVSSTextTracksKeyDuration is a required key if you are using caption files with a .vtt extension. kBCOVSSTextTracksKeyDuration is an optional key if you are using using caption files with a .m3u8 extension.
+
+Please refer to the code documentation in the BCOVSSComponent.h header file for more information on usage of these keys.
 
 Known Issues
 ============

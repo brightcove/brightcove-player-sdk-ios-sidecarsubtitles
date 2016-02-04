@@ -1,3 +1,7 @@
+# 2.0.3
+### Additions and Improvements
+* Fixed a playback problem that occurred when using Sidecar Subtitles in combination with videos that are sourced outside of the Brightcove Videocloud, and have extra query/fragment information in the URL.
+
 # 2.0.2
 ### Additions and Improvements
 * Added dynamic framework support for tvOS.
