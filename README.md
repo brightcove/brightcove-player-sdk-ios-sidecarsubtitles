@@ -1,4 +1,4 @@
-# Sidecar Subtitles Plugin for Brightcove Player SDK for iOS and tvOS, version 2.0.3.75
+# Sidecar Subtitles Plugin for Brightcove Player SDK for iOS and tvOS, version 2.1.0.95
 
 Supported Platforms
 ===================

@@ -14,7 +14,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		VNodGeNrWAjC3DD6SGGwwS4DWFM=
+		3omYGOjffhJhbApCaCQsMYr0Kmw=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -24,17 +24,38 @@
 	<key>files2</key>
 	<dict>
 		<key>Headers/BCOVSSComponent.h</key>
-		<data>
-		4nt9940l2vJjpIygvM7dawd7Ip4=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			4nt9940l2vJjpIygvM7dawd7Ip4=
+			</data>
+			<key>hash2</key>
+			<data>
+			ZpsNn+pMY/E+ZzQRF51sbz/URJmXdKZKxltbxQV2jMY=
+			</data>
+		</dict>
 		<key>Headers/BrightcoveSidecarSubtitles.h</key>
-		<data>
-		JoILt6JJMOy8gbGNo4UVBaMEweg=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			JoILt6JJMOy8gbGNo4UVBaMEweg=
+			</data>
+			<key>hash2</key>
+			<data>
+			FqiJuyepsIGIVRS1A1ULgM+iGyWXmsfZWyUqOE/r14A=
+			</data>
+		</dict>
 		<key>Modules/module.modulemap</key>
-		<data>
-		NgHdUoXL/Lk+34HxtrU1MfXKXss=
-		</data>
+		<dict>
+			<key>hash</key>
+			<data>
+			NgHdUoXL/Lk+34HxtrU1MfXKXss=
+			</data>
+			<key>hash2</key>
+			<data>
+			OJAGUBcQMlvakMSS6Oo7qz9Gibu/tGsdjN3x436jtDI=
+			</data>
+		</dict>
 	</dict>
 	<key>rules</key>
 	<dict>

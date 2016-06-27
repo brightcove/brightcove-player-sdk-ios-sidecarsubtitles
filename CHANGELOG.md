@@ -1,3 +1,7 @@
+# 2.1.0
+### Breaking Changes
+* You must use the Brightcove Player SDK for iOS version 5.1.0+.
+
 # 2.0.3
 ### Additions and Improvements
 * Fixed a playback problem that occurred when using Sidecar Subtitles in combination with videos that are sourced outside of the Brightcove Videocloud, and have extra query/fragment information in the URL.
@@ -26,3 +30,4 @@
 ### Additions and Improvements
 * Internal Improvements.
 * You must use the Brightcove Player SDK for iOS version 4.4.0+.
+#
