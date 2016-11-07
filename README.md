@@ -1,15 +1,15 @@
-# Sidecar Subtitles Plugin for Brightcove Player SDK for iOS and tvOS, version 2.1.0.95
+# Sidecar Subtitles Plugin for Brightcove Player SDK for iOS and tvOS, version 2.1.1.103
 
 Supported Platforms
 ===================
 
-iOS 7.0 and above.
+iOS 8.0 and above.
 
 tvOS 9.0 and above.
 
 Installation
 ============
-The Sidecar Subtitles plugin for the Brightcove Player SDK provides two installation packages for iOS, a static library framework and a dynamic framework. The static library target supports deployment on iOS 7 while the dynamic framework only supports iOS 8 and above. For tvOS, The Sidecar Subtitles plugin provides a dynamic framework only.
+The Sidecar Subtitles plugin for the Brightcove Player SDK provides two installation packages for iOS, a static library framework and a dynamic framework. Static and dynamic versions of the framework are supplied for iOS. For tvOS, The Sidecar Subtitles plugin provides a dynamic framework only.
 
 CocoaPods
 --------------
@@ -36,7 +36,7 @@ To add the Sidecar Subtitles Plugin for Brightcove Player SDK to your project ma
 3. Add `BrightcoveSidecarSubtitles.framework` to your project.
 4. On the "Build Settings" tab of your application target, ensure that the "Framework Search Paths" include the path to the framework. This should have been done automatically unless the framework is stored under a different root directory than your project.
 5. (Dynamic Framework only) On the "General" tab of your application target, add 'BrightcoveSidecarSubtitles.framework' to the "Embedded Binaries" section.
-6. (Dynamic Framework only) On the "Build Phases" tab, add a "Run Script" phase with the command `bash ${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/BrightcoveSidecarSubtitles.framework/strip-frameworks.sh`. Check "Run script only when installing". This will remove unneeded architectures from the build, which is important for App Store submission. ([rdar://19209161][19209161])
+6. (Dynamic Framework only) On the "Build Phases" tab, add a "Run Script" phase with the command `bash ${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/BrightcoveSidecarSubtitles.framework/strip-frameworks.sh`. Check "Run script only when installing". This will remove unneeded architectures from the build, which is important for App Store submission.
 7. (Static Framework only) On the "Build Settings" tab of your application target, add `-ObjC` to the "Other Linker Flags" build setting.
 
 Imports
@@ -60,7 +60,7 @@ Quick Start
         NSString *accountId;  // account id
 
         BCOVPlayerSDKManager *manager = [BCOVPlayerSDKManager sharedManager];
-    [1] id<BCOVPlaybackController> controller = [playbackManager createSidecarSubtitlesPlaybackControllerWithViewStrategy:[manager defaultControlsViewStrategy]];
+    [1] id<BCOVPlaybackController> controller = [playbackManager createSidecarSubtitlesPlaybackControllerWithViewStrategy:nil];
         [self.view addSubview:controller.view];
 
         BCOVPlaybackService *playbackService = [[BCOVPlaybackService alloc] initWithAccountId:accoundId policyKey:policyKey];
@@ -78,13 +78,47 @@ Quick Start
 
 Let's break this code down into steps, to make it a bit simpler to digest:
 
-1. BCOVSidecarSubtitles adds some category methods to BCOVPlaybackManager. The first of these is `-createSidecarSubtitlesPlaybackControllerWithViewStrategy:`. Use this method to create your playback controller. Alternatively (if you are using more than one session provider), you can create a BCOVSSSessionProvider and pass that to the manager method that creates a playback controller with upstream session providers.\* If you are developing for tvOS, the ViewStrategy passed to createSidecarSubtitlesPlaybackControllerWithViewStrategy will be nil.
+1. BCOVSidecarSubtitles adds some category methods to BCOVPlaybackManager. The first of these is `-createSidecarSubtitlesPlaybackControllerWithViewStrategy:`. Use this method to create your playback controller. Alternately (if you are using more than one session provider), you can create a BCOVSSSessionProvider and pass that to the manager method that creates a playback controller with upstream session providers.\* If you are developing for tvOS, the ViewStrategy passed to createSidecarSubtitlesPlaybackControllerWithViewStrategy must be nil.
 
-1. In order to retrieve web vtt files from your Brightcove account automatically, you need to use the `BCOVPlaybackService` instead of the BCOVCatalogService to retrieve your videos. If you need to use `BCOVCatalogService`, you will need to follow the directions in the "Manually populating subtitle data".
+1. In order to retrieve web vtt files from your Brightcove account automatically, you need to use the `BCOVPlaybackService` instead of the `BCOVCatalogService` to retrieve your videos. If you need to use `BCOVCatalogService`, you will need to follow the directions in the section "Manually populating subtitle data".
 
 \* Note that `BCOVSSSessionProvider` should come before any session providers in the chain passed to the manager when constructing the playback controller. This plugin is **not compatible** with the Widevine plugin.
 
-If you have questions or need help, we have a support forum for Brightcove's native Player SDKs at https://groups.google.com/forum/#!forum/brightcove-native-player-sdks .
+Using the Built-In PlayerUI Controls
+---
+
+The code snippet above presents a video player without any controls. You can add playback controls to your code like this.
+
+Add a property to keep track of the `BCOVPUIPlayerView`:
+
+    // PlayerUI's Player View
+    @property (nonatomic) BCOVPUIPlayerView *playerView;
+
+Create the `BCOVPUIBasicControlView`, and then the `BCOVPUIPlayerView`. This is where we associate the Playback Controller (and thus all the videos it plays) with the controls. Set the player view to match the video container from your layout (`yourVideoView`) when it resizes.
+
+    BCOVPUIBasicControlView *controlView = [BCOVPUIBasicControlView basicControlViewWithVODLayout];
+    self.playerView = [[BCOVPUIPlayerView alloc] initWithPlaybackController:controller options:nil controlsView:controlView];
+
+    // Match parent view size
+    self.playerView.frame = self.yourVideoView.bounds;
+    self.playerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+
+    // Add BCOVPUIPlayerView to your video view.
+    [self.yourVideoView addSubview:self.playerView];
+
+If you use the BCOVPUIPlayerView, you also need to remove one line above:
+
+    [self.view addSubview:controller.view]; // no longer needed when using PlayerUI
+    
+If you want to reuse the player with with another playback controller, you can simply make a new assignment:
+
+	self.playerView.playbackController = anotherPlaybackController;
+
+The player view will automatically add the playback controller's view to its own view hierarchy.
+
+Please see the Brightcove Native Player SDK's README for more information about adding and cumstomizing PlayerUI controls in your app.
+
+If you have questions or need help, visit the [Brightcove Native Player SDK support forum](https://groups.google.com/forum/#!forum/brightcove-native-player-sdks).
 
 Manually populating subtitle data
 =================================
@@ -116,6 +150,8 @@ Please refer to the code documentation in the BCOVSSComponent.h header file for 
 
 Known Issues
 ============
+
+* Subtitles will not be displayed when viewing 360 degree videos.
 
 * This plugin currently does not support integrating with the Widevine Plugin for Brightcove Brightcove Player SDK for iOS.
 

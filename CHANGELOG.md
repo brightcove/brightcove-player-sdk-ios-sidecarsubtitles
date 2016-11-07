@@ -1,14 +1,19 @@
+# 2.1.1
+### Additions and Improvements
+* Fixes an issue where some advanced HLS streams would become unplayable when sidecar subtitles were added to them (specifically, streams whose manifest contained EXT-X-MEDIA tags without an embedded URI).
+* Fixes an issue where some HLS manifests that used relative URLs with query strings would become unplayable when sidecar subtitles were added to them.
+
 # 2.1.0
 ### Breaking Changes
 * You must use the Brightcove Player SDK for iOS version 5.1.0+.
 
 # 2.0.3
 ### Additions and Improvements
-* Fixed a playback problem that occurred when using Sidecar Subtitles in combination with videos that are sourced outside of the Brightcove Videocloud, and have extra query/fragment information in the URL.
+* Fixes a playback problem that occurred when using Sidecar Subtitles in combination with videos that are sourced outside of the Brightcove Videocloud, and have extra query/fragment information in the URL.
 
 # 2.0.2
 ### Additions and Improvements
-* Added dynamic framework support for tvOS.
+* Adds dynamic framework support for tvOS.
 
 # 2.0.1
 ### Additions and Improvements
