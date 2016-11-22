@@ -1,3 +1,8 @@
+# 2.1.2
+### Additions and Improvements
+* The podspec now supports version 5.2 of the Brightcove Player SDK for iOS.
+* The minimum supported deployment target is now iOS 8.0.
+
 # 2.1.1
 ### Additions and Improvements
 * Fixes an issue where some advanced HLS streams would become unplayable when sidecar subtitles were added to them (specifically, streams whose manifest contained EXT-X-MEDIA tags without an embedded URI).

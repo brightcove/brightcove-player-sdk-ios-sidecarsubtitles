@@ -1,4 +1,4 @@
-# Sidecar Subtitles Plugin for Brightcove Player SDK for iOS and tvOS, version 2.1.1.103
+# Sidecar Subtitles Plugin for Brightcove Player SDK for iOS and tvOS, version 2.1.2.108
 
 Supported Platforms
 ===================
@@ -9,7 +9,7 @@ tvOS 9.0 and above.
 
 Installation
 ============
-The Sidecar Subtitles plugin for the Brightcove Player SDK provides two installation packages for iOS, a static library framework and a dynamic framework. Static and dynamic versions of the framework are supplied for iOS. For tvOS, The Sidecar Subtitles plugin provides a dynamic framework only.
+The Sidecar Subtitles plugin for Brightcove Player SDK provides two installation packages for iOS; a static library framework and a dynamic framework. For tvOS, the Sidecar Subtitles plugin provides a dynamic framework only.
 
 CocoaPods
 --------------
@@ -84,9 +84,10 @@ Let's break this code down into steps, to make it a bit simpler to digest:
 
 \* Note that `BCOVSSSessionProvider` should come before any session providers in the chain passed to the manager when constructing the playback controller. This plugin is **not compatible** with the Widevine plugin.
 
+If you have questions or need help, we have a support forum for Brightcove's native Player SDKs at https://groups.google.com/forum/#!forum/brightcove-native-player-sdks .
+
 Using the Built-In PlayerUI Controls
 ---
-
 The code snippet above presents a video player without any controls. You can add playback controls to your code like this.
 
 Add a property to keep track of the `BCOVPUIPlayerView`:
@@ -157,4 +158,4 @@ Known Issues
 
 * If your videos are being retrieved from the Brightcove Playback API, your renditions must include a master M3U8 playlist. The Sidecar Subtitle plugin does not work with single rendition M3U8 playlists.
 
-* If you are providing a Subtitle playlist to the plugin, and that subtitle playlist includes links to web vtt files that respond as 404, playback will fail. This is a bug in Apple's AVPlayer.
+* If you are providing a subtitle playlist to the plugin, and that subtitle playlist includes links to web vtt files that respond as 404, playback will fail. This is a bug in Apple's AVPlayer.
