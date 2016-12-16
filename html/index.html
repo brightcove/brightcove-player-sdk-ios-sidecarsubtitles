@@ -44,7 +44,7 @@
 					<div class="section section-overview index-overview">
 						
 						
-						<h1>Sidecar Subtitles Plugin for Brightcove Player SDK for iOS and tvOS, version 2.1.2.108</h1>
+						<h1>Sidecar Subtitles Plugin for Brightcove Player SDK for iOS and tvOS, version 2.1.3.112</h1>
 
 <h1>Supported Platforms</h1>
 
@@ -58,7 +58,7 @@
 
 <h2>CocoaPods</h2>
 
-<p>You can use <a href="http://cocoapods.org">CocoaPods</a> to add the Sidecar Subtitles Plugin for Brightcove Player SDK to your project. You can find the latest <code>Brightcove-Player-SDK-SidecarSubtitles</code> podspec <a href="https://github.com/CocoaPods/Specs/tree/master/Specs/Brightcove-Player-SDK-SidecarSubtitles">here</a>.</p>
+<p>You can use <a href="http://cocoapods.org">CocoaPods</a> to add the Sidecar Subtitles Plugin for Brightcove Player SDK to your project. You can find the latest <code>Brightcove-Player-SDK-SidecarSubtitles</code> podspec <a href="https://github.com/CocoaPods/Specs/tree/master/Specs/9/5/e/Brightcove-Player-SDK-SidecarSubtitles">here</a>.</p>
 
 <p>Specifying the default pod <code>Brightcove-Player-SDK-SidecarSubtitles</code> will install the static library framework. To install the dynamic framework, declare the pod with the <code>dynamic</code> subspec: <code>Brightcove-Player-SDK-SidecarSubtitles/dynamic</code></p>
 
@@ -70,6 +70,11 @@
 <p>Dynamic Framework example:</p>
 
 <pre><code>pod 'Brightcove-Player-SDK-SidecarSubtitles/dynamic'    
+</code></pre>
+
+<p>Maintaining an up-to-date master podspec repo is necessary to ensure that you are always using the latest versions of Brightcove software. As of CocoaPods 1.0.0, podspec repo updates are no longer an automatic feature, so to update your master repo, run the following on the command line:</p>
+
+<pre><code>pod repo update
 </code></pre>
 
 <h2>Manual</h2>
@@ -100,20 +105,21 @@
 
 <h1>Quick Start</h1>
 
-<pre><code>    NSString *policyKey;  // (Brightcove Playback API policy Key)
-    NSString *videoID; // (ID of the video you wish to use)
-    NSString *accountId;  // account id
+<pre><code>    NSString *policyKey = &lt;your-policy-key&gt;;
+    NSString *accountId = &lt;your-account-id&gt;;
+    NSString *videoID = &lt;your-video-id&gt;;
 
     BCOVPlayerSDKManager *manager = [BCOVPlayerSDKManager sharedManager];
 [1] id&lt;BCOVPlaybackController&gt; controller = [playbackManager createSidecarSubtitlesPlaybackControllerWithViewStrategy:nil];
     [self.view addSubview:controller.view];
 
-    BCOVPlaybackService *playbackService = [[BCOVPlaybackService alloc] initWithAccountId:accoundId policyKey:policyKey];
+    BCOVPlaybackService *playbackService = [[BCOVPlaybackService alloc] initWithAccountId:accoundId
+                                                                                policyKey:policyKey];
 [2] [playbackService findVideoWithVideoID:videoID
-                             parameters:nil
-                             completion:^(BCOVVideo *video,
-                                          NSDictionary *jsonResponse,
-                                          NSError      *error) {
+                               parameters:nil
+                               completion:^(BCOVVideo    *video,
+                                            NSDictionary *jsonResponse,
+                                            NSError      *error) {
 
                                  [controller setVideos:@[ video ]];
                                  [controller play];
@@ -121,17 +127,11 @@
                              }];
 </code></pre>
 
-<p>Let&rsquo;s break this code down into steps, to make it a bit simpler to digest:</p>
-
-<ol>
-<li><p>BCOVSidecarSubtitles adds some category methods to BCOVPlaybackManager. The first of these is <code>-createSidecarSubtitlesPlaybackControllerWithViewStrategy:</code>. Use this method to create your playback controller. Alternately (if you are using more than one session provider), you can create a BCOVSSSessionProvider and pass that to the manager method that creates a playback controller with upstream session providers.* If you are developing for tvOS, the ViewStrategy passed to createSidecarSubtitlesPlaybackControllerWithViewStrategy must be nil.</p></li>
-<li><p>In order to retrieve web vtt files from your Brightcove account automatically, you need to use the <code>BCOVPlaybackService</code> instead of the <code>BCOVCatalogService</code> to retrieve your videos. If you need to use <code>BCOVCatalogService</code>, you will need to follow the directions in the section &ldquo;Manually populating subtitle data&rdquo;.</p></li>
-</ol>
-
+<p>BCOVSidecarSubtitles adds some category methods to BCOVPlaybackManager. The first of these is <code>-createSidecarSubtitlesPlaybackControllerWithViewStrategy:</code>. Use this method to create your playback controller. Alternately (if you are using more than one session provider), you can create a BCOVSSSessionProvider and pass that to the manager method that creates a playback controller with upstream session providers.* If you are developing for tvOS, the ViewStrategy passed to createSidecarSubtitlesPlaybackControllerWithViewStrategy must be nil.</p>
 
 <p>* Note that <code>BCOVSSSessionProvider</code> should come before any session providers in the chain passed to the manager when constructing the playback controller. This plugin is <strong>not compatible</strong> with the Widevine plugin.</p>
 
-<p>If you have questions or need help, we have a support forum for Brightcove&rsquo;s native Player SDKs at <a href="https://groups.google.com/forum/">https://groups.google.com/forum/</a>#!forum/brightcove-native-player-sdks .</p>
+<p>If you have questions or need help, visit the support forum for Brightcove Native Player SDKs at <a href="https://groups.google.com/forum/">https://groups.google.com/forum/</a>#!forum/brightcove-native-player-sdks .</p>
 
 <h2>Using the Built-In PlayerUI Controls</h2>
 
@@ -176,7 +176,7 @@ self.playerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAuto
 
 <p>The BCOVSidecarSubtitle plugin will look for the presence of an array of subtitle metadata in the <code>BCOVVideo</code> object properties, keyed by kBCOVSSVideoPropertiesKeyTextTracks. If you are using <code>BCOVPlaybackService</code> to retrieve videos and those videos have text tracks associated with them, this will be populated automatically.</p>
 
-<p>If you are a providing your own videos, are a Perform customer or trying to use <code>BCOVCatalogService</code>, you will need to structure the data as shown below:</p>
+<p>If you are a providing your own videos or are a Perform customer, you will need to structure the data as shown below:</p>
 
 <pre><code> NSArray *subtitles = @[
     @{
@@ -192,14 +192,16 @@ self.playerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAuto
    @{...}, // third text track dictionary
 ];
 
-   BCOVVideo *video = [BCOVVideo alloc] initWithSource:&lt;source&gt; cuePoints:&lt;cuepoints&gt; properties:@{ kBCOVSSVideoPropertiesKeyTextTracks:subtitles }];
+   BCOVVideo *video = [BCOVVideo alloc] initWithSource:&lt;source&gt;
+                                             cuePoints:&lt;cuepoints&gt;
+                                            properties:@{ kBCOVSSVideoPropertiesKeyTextTracks:subtitles }];
 </code></pre>
 
 <h1>Notes</h1>
 
-<ol>
+<ul>
 <li>kBCOVSSTextTracksKeyDuration is a required key if you are using caption files with a .vtt extension. kBCOVSSTextTracksKeyDuration is an optional key if you are using using caption files with a .m3u8 extension.</li>
-</ol>
+</ul>
 
 
 <p>Please refer to the code documentation in the BCOVSSComponent.h header file for more information on usage of these keys.</p>
@@ -209,7 +211,7 @@ self.playerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAuto
 <ul>
 <li><p>Subtitles will not be displayed when viewing 360 degree videos.</p></li>
 <li><p>This plugin currently does not support integrating with the Widevine Plugin for Brightcove Brightcove Player SDK for iOS.</p></li>
-<li><p>If your videos are being retrieved from the Brightcove Playback API, your renditions must include a master M3U8 playlist. The Sidecar Subtitle plugin does not work with single rendition M3U8 playlists.</p></li>
+<li><p>When retrieving your videos from the Brightcove Playback API, your renditions must include a master M3U8 playlist. The Sidecar Subtitle plugin does not work with single rendition M3U8 playlists.</p></li>
 <li><p>If you are providing a subtitle playlist to the plugin, and that subtitle playlist includes links to web vtt files that respond as 404, playback will fail. This is a bug in Apple&rsquo;s AVPlayer.</p></li>
 </ul>
 
@@ -246,7 +248,7 @@ self.playerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAuto
 					<footer>
 						<div class="footer-copyright">
 							
-							<p class="copyright">Copyright &copy; 2016 Brightcove. All rights reserved. Updated: 2016-11-22</p>
+							<p class="copyright">Copyright &copy; 2016 Brightcove. All rights reserved. Updated: 2016-12-16</p>
 							
 							
 							<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
