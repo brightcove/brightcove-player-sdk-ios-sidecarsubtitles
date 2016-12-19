@@ -1,3 +1,7 @@
+# 2.1.4
+### Additions and Improvements
+* Podspec correction.
+
 # 2.1.3
 ### Additions and Improvements
 * The podspec now supports version 5.3 of the Brightcove Player SDK for iOS.
