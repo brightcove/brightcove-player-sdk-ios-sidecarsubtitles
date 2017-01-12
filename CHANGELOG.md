@@ -1,3 +1,7 @@
+# 2.1.5
+### Additions and Improvements
+* Fixed an issue affecting AirPlay and Apple TV devices running tvOS 10.
+
 # 2.1.4
 ### Additions and Improvements
 * Podspec correction.
@@ -48,4 +52,3 @@
 ### Additions and Improvements
 * Internal Improvements.
 * You must use the Brightcove Player SDK for iOS version 4.4.0+.
-#
