@@ -44,7 +44,7 @@
 					<div class="section section-overview index-overview">
 						
 						
-						<h1>Sidecar Subtitles Plugin for Brightcove Player SDK for iOS and tvOS, version 2.1.5.124</h1>
+						<h1>Sidecar Subtitles Plugin for Brightcove Player SDK for iOS and tvOS, version 2.1.6.129</h1>
 
 <h1>Supported Platforms</h1>
 
@@ -174,33 +174,75 @@ self.playerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAuto
 
 <h1>Manually populating subtitle data</h1>
 
-<p>The BCOVSidecarSubtitle plugin will look for the presence of an array of subtitle metadata in the <code>BCOVVideo</code> object properties, keyed by kBCOVSSVideoPropertiesKeyTextTracks. If you are using <code>BCOVPlaybackService</code> to retrieve videos and those videos have text tracks associated with them, this will be populated automatically.</p>
+<p>The BCOVSidecarSubtitle plugin will look for the presence of an array of subtitle metadata in the <code>BCOVVideo</code> object properties, keyed by <code>kBCOVSSVideoPropertiesKeyTextTracks</code>. If you are using <code>BCOVPlaybackService</code> to retrieve videos and those videos have text tracks associated with them, this will be populated automatically.</p>
 
 <p>If you are a providing your own videos or are a Perform customer, you will need to structure the data as shown below:</p>
 
-<pre><code> NSArray *subtitles = @[
-    @{
-       kBCOVSSTextTracksKeySource: ..., // required
-       kBCOVSSTextTracksKeySourceLanguage: ..., // required
-       kBCOVSSTextTracksKeyLabel: ..., // required
-       kBCOVSSTextTracksKeyDuration: ..., // required/optional [1]
-       kBCOVSSTextTracksKeyKind: kBCOVSSTextTracksKindSubtitles or kBCOVSSTextTracksKindCaptions, // required
-       kBCOVSSTextTracksKeyDefault: ..., // optional
-       kBCOVSSTextTracksKeyMIMEType: ..., // optional
-   }
-   @{...}, // second text track dictionary
-   @{...}, // third text track dictionary
+<pre><code>NSArray *subtitles = @[
+@{
+    kBCOVSSTextTracksKeySource: ..., // required
+    kBCOVSSTextTracksKeySourceLanguage: ..., // required
+    kBCOVSSTextTracksKeyLabel: ..., // required
+    kBCOVSSTextTracksKeyDuration: ..., // required/optional [1]
+    kBCOVSSTextTracksKeyKind: kBCOVSSTextTracksKindSubtitles or kBCOVSSTextTracksKindCaptions, // required
+    kBCOVSSTextTracksKeyDefault: ..., // optional
+    kBCOVSSTextTracksKeyMIMEType: ..., // optional
+},
+@{...}, // second text track dictionary
+@{...}, // third text track dictionary
 ];
 
-   BCOVVideo *video = [BCOVVideo alloc] initWithSource:&lt;source&gt;
-                                             cuePoints:&lt;cuepoints&gt;
-                                            properties:@{ kBCOVSSVideoPropertiesKeyTextTracks:subtitles }];
+BCOVVideo *video = [BCOVVideo alloc] initWithSource:&lt;source&gt;
+                         cuePoints:&lt;cuepoints&gt;
+                        properties:@{ kBCOVSSVideoPropertiesKeyTextTracks:subtitles }];
+</code></pre>
+
+<p>The <code>kBCOVSSTextTracksKeySource</code> key holds the source URL of your subtitle track, and can be supplied as either a WebVTT URL or an M3U8 playlist URL.</p>
+
+<p>WebVTT files should have a &ldquo;.vtt&rdquo; extension, and M3U8 files should have an &ldquo;.M3U8&rdquo; extension. If you cannot follow these conventions, you must include a <code>kBCOVSSTextTracksKeySourceType</code> key, and specify either <code>kBCOVSSTextTracksKeySourceTypeWebVTTURL</code> or <code>kBCOVSSTextTracksKeySourceTypeM3U8URL</code> to indicate the type of file referred to by the URL.</p>
+
+<p>If you are supplying tracks to a video retrieved from Video Cloud, you should <strong>add</strong> your subtitles to any existing tracks rather than <strong>overwriting</strong> them. This code shows how you can add tracks to an existing video:</p>
+
+<pre><code>BCOVVideo *updatedVideo = [video update:^(id&lt;BCOVMutableVideo&gt; mutableVideo) {
+
+    // Save the current tracks
+    NSArray *originalTracks = video.properties[kBCOVSSVideoPropertiesKeyTextTracks];
+
+    // Create your text track dictionary
+    NSArray *subtitles = @[
+    @{
+        kBCOVSSTextTracksKeySource: ..., // required
+        kBCOVSSTextTracksKeySourceLanguage: ..., // required
+        kBCOVSSTextTracksKeyLabel: ..., // required
+        kBCOVSSTextTracksKeyDuration: ..., // required/optional [1]
+        kBCOVSSTextTracksKeyKind: kBCOVSSTextTracksKindSubtitles or kBCOVSSTextTracksKindCaptions, // required
+        kBCOVSSTextTracksKeyDefault: ..., // optional
+        kBCOVSSTextTracksKeyMIMEType: ..., // optional
+    },
+    @{...}, // second text track dictionary
+    @{...}, // third text track dictionary
+    ];
+
+    // Append new tracks to the original tracks, if any
+    NSArray *combinedTextTracks = ((originalTracks != nil)
+                                    ? [originalTracks arrayByAddingObjectsFromArray:subtitles]
+                                    : subtitles);
+
+    // Update the current dictionary (we don't want to lose the properties already in there)
+    NSMutableDictionary *updatedDictionary = [mutableVideo.properties mutableCopy];
+
+    // Store text tracks in the text tracks property
+    updatedDictionary[kBCOVSSVideoPropertiesKeyTextTracks] = combinedTextTracks;
+
+    mutableVideo.properties = updatedDictionary;
+
+}];
 </code></pre>
 
 <h1>Notes</h1>
 
 <ul>
-<li>kBCOVSSTextTracksKeyDuration is a required key if you are using caption files with a .vtt extension. kBCOVSSTextTracksKeyDuration is an optional key if you are using using caption files with a .m3u8 extension.</li>
+<li><code>kBCOVSSTextTracksKeyDuration</code> is a required key if you are using caption files with a .vtt extension. <code>kBCOVSSTextTracksKeyDuration</code> is an optional key if you are using using caption files with a .m3u8 extension.</li>
 </ul>
 
 
@@ -248,7 +290,7 @@ self.playerView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAuto
 					<footer>
 						<div class="footer-copyright">
 							
-							<p class="copyright">Copyright &copy; 2017 Brightcove. All rights reserved. Updated: 2017-01-12</p>
+							<p class="copyright">Copyright &copy; 2017 Brightcove. All rights reserved. Updated: 2017-01-30</p>
 							
 							
 							<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>

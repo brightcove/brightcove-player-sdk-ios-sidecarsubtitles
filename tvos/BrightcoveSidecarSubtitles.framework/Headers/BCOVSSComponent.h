@@ -49,8 +49,12 @@ extern NSString * const kBCOVSSVideoPropertiesKeyTextTracks;
 /**
  * @constant kBCOVSSTextTracksKeySource
  * @abstract The key for the NSString URL to the text track.
- * @discussion This key is required. Text track source can be either M3U8 
- * subtitle playlist or webvtt file.
+ * @discussion This key is required. Text track source can be either an M3U8
+ * subtitle playlist or a WebVTT file. WebVTT URLs should have a ".vtt"
+ * extension, and M3U8 playlist files should have an "m3u8" extension.
+ * If your URL cannot follow this convention, you need to specify the
+ * format of the file referenced by your URL with the 
+ * kBCOVSSTextTracksKeySourceType key.
  */
 extern NSString * const kBCOVSSTextTracksKeySource;
 
@@ -119,6 +123,40 @@ extern NSString * const kBCOVSSTextTracksKindSubtitles;
  * @discussion Also see kBCOVSSTextTracksKeyKind and kBCOVSSTextTracksKindSubtitles.
  */
 extern NSString * const kBCOVSSTextTracksKindCaptions;
+
+/**
+ * @constant kBCOVSSTextTracksKeySourceType
+ * @abstract An NSDictionary key used to specify the type of file
+ * referred to by the kBCOVSSTextTracksKeySource URL.
+ * @discussion This NSDictionary key can take one of two values:
+ * kBCOVSSTextTracksKeySourceTypeWebVTTURL to indicate that the
+ * kBCOVSSTextTracksKeySourceType URL refers to a WebVTT file, or
+ * kBCOVSSTextTracksKeySourceTypeM3U8URL to indicate that the
+ * kBCOVSSTextTracksKeySourceType URL refers to an M3U8 file.
+ * This key/value pair is only necessary if the source URL does not
+ * use a ".vtt" or ".m3u8" extension.
+ */
+extern NSString * const kBCOVSSTextTracksKeySourceType;
+
+/**
+ * @constant kBCOVSSTextTracksKeySourceTypeWebVTTURL
+ * @abstract An NSDictionary value used to indicate that the
+ * source URL refers to a WebVTT file.
+ * @discussion This key/value pair is only necessary if the
+ * source URL refers to a WebVTT file, but does not use
+ * a ".vtt" extension.
+ */
+extern NSString * const kBCOVSSTextTracksKeySourceTypeWebVTTURL;
+
+/**
+ * @constant kBCOVSSTextTracksKeySourceTypeM3U8URL
+ * @abstract An NSDictionary value used to indicate that the
+ * source URL refers to an M3U8 file.
+ * @discussion This key/value pair is only necessary if the
+ * source URL refers to an M3U8 file, but does not use
+ * an ".m3u8" extension.
+ */
+extern NSString * const kBCOVSSTextTracksKeySourceTypeM3U8URL;
 
 
 @interface BCOVPlayerSDKManager (BCOVSSAdditions)

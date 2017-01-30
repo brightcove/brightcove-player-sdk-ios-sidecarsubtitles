@@ -1,3 +1,11 @@
+# 2.1.6
+### Additions and Improvements
+* Added support for using M3U8 playlist and WebVTT URLs that do not have ".vtt" or ".m3u8" file extensions. You can use these by adding a new `kBCOVSSTextTracksKeySourceType` value to a track dictionary. See BCOVSSComponent.h for details. Changes include:
+	* The `kBCOVSSTextTracksKeySourceType` dictionary key allows you to specify the type of file referred to by the kBCOVSSTextTracksKeySource URL in a sidecar track dictionary when you cannot use a ".vtt" or ".m3u8" extension.
+	* The `kBCOVSSTextTracksKeySourceTypeWebVTTURL` value for the `kBCOVSSTextTracksKeySourceType` key specifies that the type of file referred to by the source URL in a sidecar track dictionary is a WebVTT file.
+	* The `kBCOVSSTextTracksKeySourceTypeM3U8URL ` value for the `kBCOVSSTextTracksKeySourceType` key specifies that the type of file referred to by the source URL in a sidecar track dictionary is an M3U8 playlist.
+* Internal improvements (5ec7a57b)
+
 # 2.1.5
 ### Additions and Improvements
 * Fixed an issue affecting AirPlay and Apple TV devices running tvOS 10.

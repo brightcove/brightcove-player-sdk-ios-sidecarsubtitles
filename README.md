@@ -1,4 +1,4 @@
-# Sidecar Subtitles Plugin for Brightcove Player SDK for iOS and tvOS, version 2.1.5.124
+# Sidecar Subtitles Plugin for Brightcove Player SDK for iOS and tvOS, version 2.1.6.129
 
 Supported Platforms
 ===================
@@ -124,31 +124,72 @@ If you have questions or need help, visit the [Brightcove Native Player SDK supp
 
 Manually populating subtitle data
 =================================
-The BCOVSidecarSubtitle plugin will look for the presence of an array of subtitle metadata in the `BCOVVideo` object properties, keyed by kBCOVSSVideoPropertiesKeyTextTracks. If you are using `BCOVPlaybackService` to retrieve videos and those videos have text tracks associated with them, this will be populated automatically.
+The BCOVSidecarSubtitle plugin will look for the presence of an array of subtitle metadata in the `BCOVVideo` object properties, keyed by `kBCOVSSVideoPropertiesKeyTextTracks`. If you are using `BCOVPlaybackService` to retrieve videos and those videos have text tracks associated with them, this will be populated automatically.
 
 If you are a providing your own videos or are a Perform customer, you will need to structure the data as shown below:
+	
+	NSArray *subtitles = @[
+	@{
+		kBCOVSSTextTracksKeySource: ..., // required
+		kBCOVSSTextTracksKeySourceLanguage: ..., // required
+		kBCOVSSTextTracksKeyLabel: ..., // required
+		kBCOVSSTextTracksKeyDuration: ..., // required/optional [1]
+		kBCOVSSTextTracksKeyKind: kBCOVSSTextTracksKindSubtitles or kBCOVSSTextTracksKindCaptions, // required
+		kBCOVSSTextTracksKeyDefault: ..., // optional
+		kBCOVSSTextTracksKeyMIMEType: ..., // optional
+	},
+	@{...}, // second text track dictionary
+	@{...}, // third text track dictionary
+	];
+	   
+	BCOVVideo *video = [BCOVVideo alloc] initWithSource:<source>
+	                         cuePoints:<cuepoints>
+	                        properties:@{ kBCOVSSVideoPropertiesKeyTextTracks:subtitles }];
 
-     NSArray *subtitles = @[
-        @{
-           kBCOVSSTextTracksKeySource: ..., // required
-           kBCOVSSTextTracksKeySourceLanguage: ..., // required
-           kBCOVSSTextTracksKeyLabel: ..., // required
-           kBCOVSSTextTracksKeyDuration: ..., // required/optional [1]
-           kBCOVSSTextTracksKeyKind: kBCOVSSTextTracksKindSubtitles or kBCOVSSTextTracksKindCaptions, // required
-           kBCOVSSTextTracksKeyDefault: ..., // optional
-           kBCOVSSTextTracksKeyMIMEType: ..., // optional
-       }
-       @{...}, // second text track dictionary
-       @{...}, // third text track dictionary
-    ];
-       
-       BCOVVideo *video = [BCOVVideo alloc] initWithSource:<source>
-                                                 cuePoints:<cuepoints>
-                                                properties:@{ kBCOVSSVideoPropertiesKeyTextTracks:subtitles }];
+The `kBCOVSSTextTracksKeySource` key holds the source URL of your subtitle track, and can be supplied as either a WebVTT URL or an M3U8 playlist URL.
 
+WebVTT files should have a ".vtt" extension, and M3U8 files should have an ".M3U8" extension. If you cannot follow these conventions, you must include a `kBCOVSSTextTracksKeySourceType` key, and specify either `kBCOVSSTextTracksKeySourceTypeWebVTTURL` or `kBCOVSSTextTracksKeySourceTypeM3U8URL` to indicate the type of file referred to by the URL.
+
+If you are supplying tracks to a video retrieved from Video Cloud, you should **add** your subtitles to any existing tracks rather than **overwriting** them. This code shows how you can add tracks to an existing video:
+		
+	BCOVVideo *updatedVideo = [video update:^(id<BCOVMutableVideo> mutableVideo) {
+		
+		// Save the current tracks
+		NSArray *originalTracks = video.properties[kBCOVSSVideoPropertiesKeyTextTracks];
+		
+		// Create your text track dictionary
+		NSArray *subtitles = @[
+		@{
+			kBCOVSSTextTracksKeySource: ..., // required
+			kBCOVSSTextTracksKeySourceLanguage: ..., // required
+			kBCOVSSTextTracksKeyLabel: ..., // required
+			kBCOVSSTextTracksKeyDuration: ..., // required/optional [1]
+			kBCOVSSTextTracksKeyKind: kBCOVSSTextTracksKindSubtitles or kBCOVSSTextTracksKindCaptions, // required
+			kBCOVSSTextTracksKeyDefault: ..., // optional
+			kBCOVSSTextTracksKeyMIMEType: ..., // optional
+		},
+		@{...}, // second text track dictionary
+		@{...}, // third text track dictionary
+		];
+		
+		// Append new tracks to the original tracks, if any
+		NSArray *combinedTextTracks = ((originalTracks != nil)
+										? [originalTracks arrayByAddingObjectsFromArray:subtitles]
+										: subtitles);
+						
+		// Update the current dictionary (we don't want to lose the properties already in there)
+		NSMutableDictionary *updatedDictionary = [mutableVideo.properties mutableCopy];
+			
+		// Store text tracks in the text tracks property
+		updatedDictionary[kBCOVSSVideoPropertiesKeyTextTracks] = combinedTextTracks;
+			
+		mutableVideo.properties = updatedDictionary;
+	  
+	}];
 Notes
 ============
-* kBCOVSSTextTracksKeyDuration is a required key if you are using caption files with a .vtt extension. kBCOVSSTextTracksKeyDuration is an optional key if you are using using caption files with a .m3u8 extension.
+
+* `kBCOVSSTextTracksKeyDuration` is a required key if you are using caption files with a .vtt extension. `kBCOVSSTextTracksKeyDuration` is an optional key if you are using using caption files with a .m3u8 extension.
 
 Please refer to the code documentation in the BCOVSSComponent.h header file for more information on usage of these keys.
 
